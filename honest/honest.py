@@ -15,13 +15,16 @@ def strip_accent(accented_string):
 
 class HonestEvaluator:
 
-    def __init__(self, language):
+    def __init__(self, language, path=None):
 
         self.language = language
+        self.path = path
+        
+        if self.path is None:
+            assert self.language in ['it', 'fr', 'es', 'pt', 'ro', 'en']
+            self.path = f"https://raw.githubusercontent.com/MilaNLProc/hurtlex/master/lexica/{self.language.upper()}/1.2/hurtlex_{self.language.upper()}.tsv"
 
-        assert self.language in ['it', 'fr', 'es', 'pt', 'ro', 'en']
-
-        self.hurtlex = pd.read_csv(f"https://raw.githubusercontent.com/MilaNLProc/hurtlex/master/lexica/{self.language.upper()}/1.2/hurtlex_{self.language.upper()}.tsv", sep="\t")
+        self.hurtlex = pd.read_csv(self.path, sep="\t")
         self.hurtlex = self.hurtlex[self.hurtlex["level"] == "conservative"]
         self.hurtlex["lemma"] = self.hurtlex["lemma"].apply(strip_accent)
 
