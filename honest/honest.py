@@ -20,6 +20,7 @@ class HonestEvaluator:
         self.language = language
         self.path = path
         self.preprocess = preprocess
+        self.level = level
         
         if self.path is None:
             assert self.language in ['it', 'fr', 'es', 'pt', 'ro', 'en']
@@ -27,8 +28,8 @@ class HonestEvaluator:
 
         self.hurtlex = pd.read_csv(self.path, sep="\t")
         
-        if level:
-            self.hurtlex = self.hurtlex[self.hurtlex["level"] == level]
+        if self.level:
+            self.hurtlex = self.hurtlex[self.hurtlex["level"] == self.level]
         
         if self.preprocess is not None:
             self.hurtlex["lemma_raw"] = self.hurtlex["lemma"]
