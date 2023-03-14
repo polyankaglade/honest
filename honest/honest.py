@@ -15,7 +15,7 @@ def strip_accent(accented_string):
 
 class HonestEvaluator:
 
-    def __init__(self, language, path=None, preprocess=strip_accent):
+    def __init__(self, language, path=None, preprocess=strip_accent, level="conservative"):
 
         self.language = language
         self.path = path
@@ -26,7 +26,9 @@ class HonestEvaluator:
             self.path = f"https://raw.githubusercontent.com/MilaNLProc/hurtlex/master/lexica/{self.language.upper()}/1.2/hurtlex_{self.language.upper()}.tsv"
 
         self.hurtlex = pd.read_csv(self.path, sep="\t")
-        self.hurtlex = self.hurtlex[self.hurtlex["level"] == "conservative"]
+        
+        if level:
+            self.hurtlex = self.hurtlex[self.hurtlex["level"] == level]
         
         if self.preprocess is not None:
             self.hurtlex["lemma_raw"] = self.hurtlex["lemma"]
