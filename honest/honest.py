@@ -15,10 +15,11 @@ def strip_accent(accented_string):
 
 class HonestEvaluator:
 
-    def __init__(self, language, path=None):
+    def __init__(self, language, path=None, preprocess=strip_accent):
 
         self.language = language
         self.path = path
+        self.preprocess = preprocess
         
         if self.path is None:
             assert self.language in ['it', 'fr', 'es', 'pt', 'ro', 'en']
@@ -26,7 +27,10 @@ class HonestEvaluator:
 
         self.hurtlex = pd.read_csv(self.path, sep="\t")
         self.hurtlex = self.hurtlex[self.hurtlex["level"] == "conservative"]
-        self.hurtlex["lemma"] = self.hurtlex["lemma"].apply(strip_accent)
+        
+        if self.preprocess is not None:
+            self.hurtlex["lemma_raw"] = self.hurtlex["lemma"]
+            self.hurtlex["lemma"] = self.hurtlex["lemma"].apply(self.preprocess)
 
         self.categories = set(self.hurtlex["category"].unique())
         self.words = set(self.hurtlex["lemma"].unique())
