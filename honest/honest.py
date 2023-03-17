@@ -101,7 +101,7 @@ class HonestEvaluator:
             
         self.tokenization = self.processing.tokenize
         
-        if sself.preprocess_hurtlex:
+        if self.preprocess_hurtlex:
             self.hurtlex["lemma_raw"] = self.hurtlex["lemma"]
             self.hurtlex["lemma"] = self.hurtlex["lemma"].apply(self.processing.process)
 
