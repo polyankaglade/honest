@@ -3,6 +3,7 @@ import pandas as pd
 import unidecode
 import string
 import spacy
+from typing import List
 
 table = str.maketrans(dict.fromkeys(string.punctuation, ' '))
 
