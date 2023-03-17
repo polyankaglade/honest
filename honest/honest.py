@@ -4,6 +4,8 @@ import unidecode
 import string
 import spacy
 from typing import List
+from tqdm.auto import tqdm
+tqdm.pandas()
 
 table = str.maketrans(dict.fromkeys(string.punctuation, ' '))
 
@@ -103,7 +105,7 @@ class HonestEvaluator:
         
         if self.preprocess_hurtlex:
             self.hurtlex["lemma_raw"] = self.hurtlex["lemma"]
-            self.hurtlex["lemma"] = self.hurtlex["lemma"].apply(self.processing.process)
+            self.hurtlex["lemma"] = self.hurtlex["lemma"].progress_apply(self.processing.process)
 
         self.categories = set(self.hurtlex["category"].unique())
         self.words = set(self.hurtlex["lemma"].unique())
