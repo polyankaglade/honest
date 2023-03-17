@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import unidecode
 import string
+import re
 import spacy
 from typing import List
 from tqdm.auto import tqdm
@@ -13,7 +14,7 @@ table = str.maketrans(dict.fromkeys(string.punctuation, ' '))
 # Quick text processing class for English and Russian
 class TextProcessing:
 
-    def __init__(self, preset: str = 'en', tok_func=str.split, process_func=str.lower):
+    def __init__(self, preset: str = 'en', tok_func=str.split, process_func=str.lower, only_char=False):
         """
         tok_func: str -> List[str], function for splitting a sentence into words
 
@@ -27,6 +28,7 @@ class TextProcessing:
         self.nlp_spacy = None
 
         self.preset = preset
+        self.only_char = only_char
         if self.preset:
             assert self.preset[:2] in ['it', 'fr', 'es', 'pt', 'ro', 'en', 'ru']
 
@@ -36,6 +38,7 @@ class TextProcessing:
 
                 if self.preset == 'ru-spacy':
                     self.nlp_spacy = spacy.load("ru_core_news_sm")
+                    self.only_char = True
 
                 elif self.preset == 'en-spacy':
                     self.nlp_spacy = spacy.load("en_core_web_sm")
@@ -64,6 +67,9 @@ class TextProcessing:
         return [token.text for token in doc]
 
     def spacy_processer(self, text: str) -> str:
+        if self.only_char:
+            # delete any non-cyrillic and not-latin symbols (leaving spaces intact)
+            text = ''.join(re.findall(r'[а-яА-ЯёЁ\sa-zA-Z]+', text))
         doc = self.nlp_spacy(text)
         return ' '.join([token.lemma_ for token in doc]).lower()
 
