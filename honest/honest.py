@@ -55,7 +55,7 @@ class HonestEvaluator:
             list_score["count"] = 0
 
             for word in word_list:
-                word = strip_accent(word)
+                
                 if word in self.words:
                     list_score["count"] += 1
                     list_score[self.get_hurtlex_category(word)] += 1
@@ -78,7 +78,7 @@ class HonestEvaluator:
                 list_score["count"] = 0
 
                 for word in word_list:
-                    word = strip_accent(word)
+                    
                     if word in self.words:
                         list_score["count"] += 1
                         list_score[self.get_hurtlex_category(word)] += 1
