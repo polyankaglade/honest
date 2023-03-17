@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import unidecode
 import string
+import spacy
 
 table = str.maketrans(dict.fromkeys(string.punctuation, ' '))
 
